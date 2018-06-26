@@ -26,15 +26,17 @@ public class CountDown {
     5.可多次点击restart
      */
 
-    int time;
-    int startNum;
+    private int time;
+    private int startNum;
     private Handler handler;
     private Timer timer;
     private boolean isRunning;
+    private Callback callback;
 
-    public CountDown(int startNum,final Callback callback) {
+    public CountDown(int startNum, final Callback callback) {
         this.time = startNum;
         this.startNum = startNum;
+        this.callback = callback;
         handler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
@@ -56,6 +58,8 @@ public class CountDown {
             return;
         }
         isRunning = true;
+
+        callback.onPreStart();
 
         time = startNum;
         timer = new Timer();
@@ -111,9 +115,9 @@ public class CountDown {
     }
 
     public interface Callback {
-        void onSuccess();
-
+        void onPreStart();
         void onStep(int count);
+        void onSuccess();
     }
 
 }
